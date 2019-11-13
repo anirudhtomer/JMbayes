@@ -5,14 +5,14 @@ myt <- function(times = 1) {
 
 outcome_define <- function (family, outcome) {
     dens <- switch(family$family,
-                   "gaussian" = "dnorm(mu",
+                   "gaussian" = "dt(mu",
                    "binomial" = "dbin(mu",
                    "poisson" = "dpois(mu")
     i <- outcome
     ind <- function (i) paste0("[j", i, "]")
     out <- paste0("y", i, ind(i), " ~ ", dens, i, ind(i))
     if (family$family == "gaussian") {
-       out <- paste0(out, ", tau", i, ")")
+       out <- paste0(out, ", tau", i, ", 3)")
     } else if (family$family == "binomial") {
         out <- paste0(out, ", 1", ")")
     } else {

@@ -109,11 +109,14 @@ arma::vec log_longF_svft(const field<vec>& y, const field<vec>& eta,
         if (y_i.size() == 0) {
             out += 0;
         } else {
-            if (fams[i] == "gaussian") {
-                double sigma_i = as<double>(sigmas[i]);
-                vec log_dens = - 0.5 * pow((y_i - eta_i) / sigma_i, 2);
-                out += rowsum_svft(log_dens, id_i);
-            } else if (fams[i] == "binomial") {
+			if (fams[i] == "gaussian") {
+				double sigma_i = as<double>(sigmas[i]);
+				int df = 3;
+            
+				vec log_dens = - 0.5 * (df+1) * log(1 + pow((y_i - eta_i) / sigma_i, 2)/df);
+
+				out += rowsum_svft(log_dens, id_i);
+			} else if (fams[i] == "binomial") {
                 if (links[i] == "logit") {
                     vec pr = exp(eta_i) / (1 + exp(eta_i));
                     vec log_dens = y_i % log(pr) + (1 - y_i) % log(1 - pr);

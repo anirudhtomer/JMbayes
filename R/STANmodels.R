@@ -156,9 +156,10 @@ model <- function (families, n_RE) {
                if (family$family == "gaussian") paste0(myt(), "sigma", outcome, 
                                                        " ~ student_t(3, 0, scale_sigmas);\n"))
     }
-    dist_part <- function (outcome, family) {
+	
+	dist_part <- function (outcome, family) {
         if (family$family == "gaussian") {
-            paste0(myt(), "y", outcome, " ~ normal(eta", outcome, ", sigma", outcome, ");\n")
+            paste0(myt(), "y", outcome, " ~ student_t(3, eta", outcome, ", sigma", outcome, ");\n")
         } else if (family$family == "binomial") {
             switch (family$link,
                 "logit" = paste0(myt(), "y", outcome, " ~ bernoulli_logit(eta", outcome, ");\n"),
@@ -169,6 +170,7 @@ model <- function (families, n_RE) {
             paste0(myt(), "y", outcome, " ~ poisson_log(eta", outcome, ");\n")
         }
     }
+	
     paste0(RE_part, paste0(mapply(priors_part, outcomes, families), collapse = ""),
            paste0(mapply(dist_part, outcomes, families), collapse = ""), "}\n")
 }

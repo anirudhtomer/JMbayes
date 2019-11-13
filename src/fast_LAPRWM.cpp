@@ -174,9 +174,13 @@ arma::vec log_longF(const field<vec>& y, const field<vec>& eta,
         uvec id_i = id.at(i);
         vec y_i = y.at(i);
         vec eta_i = eta.at(i);
-        if (fams[i] == "gaussian") {
+		
+		if (fams[i] == "gaussian") {
             double sigma_i = as<double>(sigmas[i]);
-            vec log_dens = - 0.5 * pow((y_i - eta_i) / sigma_i, 2);
+            int df = 3;
+            
+            vec log_dens = - 0.5 * (df+1) * log(1 + pow((y_i - eta_i) / sigma_i, 2)/df);
+
             out += rowsum(log_dens, id_i);
         } else if (fams[i] == "binomial") {
             if (links[i] == "logit") {
