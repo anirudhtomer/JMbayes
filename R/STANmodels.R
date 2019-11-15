@@ -79,22 +79,22 @@ transformed_parameters <- function (families, colmns_HC, colmns_nHC, RE_inds) {
     nams <- names(colmns_HC2)
     ncols <- sapply(colmns_HC2, length)
     HC_part <- function (outcome, columns, nam, ncol, i) {
-        #if (ncol > 1) {
-        #    paste0(myt(2), "mu_u[i, ", i,"] = dot_product(Xhc", outcome, 
-        #           "[i, ", nam, "], betas", outcome, "[", nam, "]);\n")
-        #} else if (ncol == 1) {
-        #    paste0(myt(2), "mu_u[i, ", i,"] = Xhc", outcome, 
-        #           "[i, ", columns, "] * betas", outcome, "[", columns, "];\n")
-        #} else {
-        #    paste0(myt(2), "mu_u[i, ", i,"] = 0.0;\n")
-        #}
-        if (ncol) {
-            paste0(myt(2), "mu_u[i, ", i,"] = ", 
-                   paste0("Xhc", outcome, "[i, ", columns, "] * betas", 
-                          outcome, "[", columns, "]", collapse = " + "), ";\n")
+        if (ncol > 1) {
+           paste0(myt(2), "mu_u[i, ", i,"] = dot_product(Xhc", outcome,
+                  "[i, ", nam, "], betas", outcome, "[", nam, "]);\n")
+        } else if (ncol == 1) {
+           paste0(myt(2), "mu_u[i, ", i,"] = Xhc", outcome,
+                  "[i, ", columns, "] * betas", outcome, "[", columns, "];\n")
         } else {
-            paste0(myt(2), "mu_u[i, ", i,"] = 0.0;\n")
+           paste0(myt(2), "mu_u[i, ", i,"] = 0.0;\n")
         }
+        # if (ncol) {
+        #     paste0(myt(2), "mu_u[i, ", i,"] = ", 
+        #            paste0("Xhc", outcome, "[i, ", columns, "] * betas", 
+        #                   outcome, "[", columns, "]", collapse = " + "), ";\n")
+        # } else {
+        #     paste0(myt(2), "mu_u[i, ", i,"] = 0.0;\n")
+        # }
     }
     linpred_part <- function (outcome, colmns_HC, colmns_nHC, RE_ind) {
         j_i <- paste0("j", outcome)
