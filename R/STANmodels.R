@@ -146,7 +146,7 @@ model <- function (families, n_RE) {
     }
     dist_part <- function (outcome, family) {
         if (family$family == "gaussian") {
-            paste0(myt(), "y", outcome, " ~ normal(eta", outcome, ", sigma", outcome, ");\n")
+            paste0(myt(), "y", outcome, " ~ student_t(3, eta", outcome, ", sigma", outcome, ");\n")
         } else if (family$family == "binomial") {
             switch (family$link,
                 "logit" = paste0(myt(), "y", outcome, " ~ bernoulli_logit(eta", outcome, ");\n"),
